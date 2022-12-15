@@ -1,7 +1,24 @@
 "use strict";
 const memoryCards = document.querySelectorAll('.memory-card');
+const overlayElem = document.querySelector('.overlay');
 let pickedCards = [];
 let foundPair = 0;
+function hasWon() {
+    var _a;
+    if (foundPair === 8) {
+        overlayElem === null || overlayElem === void 0 ? void 0 : overlayElem.classList.toggle('show');
+        // Reset the game 
+        (_a = document.querySelector('.close')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
+            location.reload;
+            overlayElem === null || overlayElem === void 0 ? void 0 : overlayElem.classList.toggle('show');
+            foundPair = 0;
+            pickedCards = [];
+            memoryCards.forEach((memoryCard) => {
+                memoryCard.classList.remove('flip');
+            });
+        });
+    }
+}
 function resetCards() {
     pickedCards = [];
 }
@@ -18,6 +35,7 @@ function compareCards() {
     if (cardOne === cardtwo) {
         foundPair++;
         resetCards();
+        hasWon();
         console.log("Same pair");
     }
     else {
@@ -29,6 +47,12 @@ function compareCards() {
 function addCard(card) {
     pickedCards.push(card);
     // If pickedCards has 2 cards so we will compare
+}
+function shuffle() {
+    memoryCards.forEach((memoryCard) => {
+        const position = Math.floor(Math.random() * memoryCards.length);
+        memoryCard.style.order = position.toString(); // Order is a Flexbox property and can't be used ourside of Felxbox 
+    });
 }
 function addClickEvent() {
     memoryCards.forEach((memoryCard) => {
@@ -45,5 +69,6 @@ function addClickEvent() {
             }
         });
     });
+    shuffle();
 }
 addClickEvent();

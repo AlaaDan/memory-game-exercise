@@ -1,6 +1,26 @@
 const memoryCards = document.querySelectorAll('.memory-card')
+const overlayElem = document.querySelector('.overlay');
 let pickedCards: HTMLElement[] = [];
 let foundPair = 0;
+
+
+function hasWon(): void{
+    if (foundPair === 8){
+        overlayElem?.classList.toggle('show');
+        // Reset the game 
+        document.querySelector('.close')?.addEventListener('click',()=>{
+            location.reload;
+            overlayElem?.classList.toggle('show');
+            foundPair = 0;
+            pickedCards = [];
+            memoryCards.forEach((memoryCard)=>{
+                memoryCard.classList.remove('flip')
+            })
+
+        });
+    }
+    
+}
 
 function resetCards(){
     pickedCards= []
@@ -22,6 +42,7 @@ function compareCards(): void{
     if(cardOne === cardtwo){
         foundPair++;
         resetCards();
+        hasWon();
         console.log("Same pair")
     }else{
         console.log("Not the same")
@@ -34,7 +55,13 @@ function addCard(card: HTMLElement): void{
     // If pickedCards has 2 cards so we will compare
     
 }
+function shuffle(): void{
+    memoryCards.forEach((memoryCard: any)=>{
+        const position = Math.floor(Math.random() *memoryCards.length)
+        memoryCard.style.order = position.toString() // Order is a Flexbox property and can't be used ourside of Felxbox 
+    })
 
+}
 function addClickEvent (): void{
     memoryCards.forEach((memoryCard) =>{
         memoryCard.addEventListener('click', (event)=>{
@@ -52,6 +79,7 @@ function addClickEvent (): void{
             }
         });
     });
+    shuffle();
 }
 
 addClickEvent()
